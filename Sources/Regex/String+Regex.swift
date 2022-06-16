@@ -19,17 +19,25 @@
  */
 public extension String {
     /**
-     * Creates a regex using this string as a pattern. Can return nil if pattern is invalid.
+     * Creates a case-sensitive regex using this string as a pattern. Can return nil if pattern is invalid.
      */
-    var r : Regex? {
+    var rc : CustomRegex? {
         get {
-            return try? Regex(pattern: self)
+            return try? CustomRegex(pattern: self, options: [])
         }
     }
-    
+    /**
+     * Creates a regex using this string as a pattern. Can return nil if pattern is invalid.
+     */
+    var r : CustomRegex? {
+        get {
+            return try? CustomRegex(pattern: self)
+        }
+    }
+
     /**
      An inverse alias to Regex.split
-     
+
      - parameters:
        - regex: Regex to split the string with
      - returns: An array. See Regex.split for more details.
@@ -47,7 +55,7 @@ infix operator !~ : ComparisonPrecedence
 
 /**
  Syntactic sugar for pattern matching. Used as "ABC" =~ ".*".r
- 
+
  - see: Regex.matches for more details.
  - parameters:
    - source: String to match
@@ -64,7 +72,7 @@ public func =~(source:String, regex:RegexProtocol?) -> Bool {
 /**
  Syntactic sugar for pattern matching. Used as "ABC" =~ ".*"
  Regex is automatically created from the second string.
- 
+
  - see: Regex.matches for more details
  - parameters:
    - source: String to match
@@ -78,7 +86,7 @@ public func =~(source:String, pattern:String) -> Bool {
 /**
  Syntactic sugar for pattern matching. Used as "ABC" !~ ".*".r
  Basically is negation of =~ operator.
- 
+
  - see: Regex.matches for more details
  - parameters:
    - source: String to match
@@ -92,9 +100,9 @@ public func !~(source:String, regex:RegexProtocol?) -> Bool {
 /**
  Syntactic sugar for pattern matching. Used as "ABC" =~ ".*"
  Basically is negation of =~ operator.
- 
+
  Regex is automatically created from the second string.
- 
+
  - see: Regex.matches for more details
  - parameters:
    - source: String to match
@@ -107,7 +115,7 @@ public func !~(source:String, pattern:String) -> Bool {
 
 /**
  Operator is used by `switch` keyword in constructions like following:
- 
+
  ```swift
  switch str {
     case "\\d+".r: print("has digit")
@@ -115,9 +123,9 @@ public func !~(source:String, pattern:String) -> Bool {
     default: print("nothing")
  }
  ```
- 
+
  Deep integration with Swift.
- 
+
  - returns: True if matches, false otherwise
  */
 public func ~=(regex:RegexProtocol?, source:String) -> Bool {
